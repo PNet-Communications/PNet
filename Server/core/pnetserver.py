@@ -1,21 +1,50 @@
 #!/usr/bin/python
 
-#This is tcp_server.py script
+import socket
+from pathlib import Path
+import keyboard
+from getpass import getpass
 
-import socket			            #line 1: Import socket module
+pwd = Path("key.txt")
+if pwd.is_file():
+    s = socket.socket()
+    hostip = socket.gethostbyname(socket.gethostname())
+    host = socket.gethostname()	      
+    port = 9090			        
 
-s = socket.socket()		            #line 2: create a socket object
-host = socket.gethostname()	            #line 3: Get current machine name
-port = 9090			            #line 4: Get port number for connection
+    s.bind((host,port))		   
+    
+    print("PNet server IP: " + hostip)
+    print("Waiting for connection...")	
+    s.listen(5)			 
 
-s.bind((host,port))		            #line 5: bind with the address
+    while True:
+        conn,addr = s.accept()	     
+        print('Got Connection from', addr)
+        message = "Successfully connected to " + hostip
+        conn.send(message.encode())
+        conn.close()
+            
+else:
+    password_provided = getpass("Enter a secure password: ")
+    file = open(r"key.txt", "w")
+    file.write(password_provided)
+    file.close()
 
-print("Waiting for connection...")	
-s.listen(5)			            #line 6: listen for connections
+    s = socket.socket()		   
+    hostip = socket.gethostbyname(socket.gethostname())
+    host = socket.gethostname()	      
+    port = 9090			        
 
-while True:
-    conn,addr = s.accept()	            #line 7: connect and accept from client
-    print('Got Connection from', addr)
-    message = "Server saying Hi"
-    conn.send(message.encode())
-    conn.close()		            #line 8: Close the connection
+    s.bind((host,port))		
+    
+    print("PNet server IP: " + hostip)
+    print("Waiting for connection...")
+    s.listen(5)			 
+
+    while True:
+        conn,addr = s.accept()	     
+        print('Got Connection from', addr)
+        message = "Successfully connected to " + hostip
+        conn.send(message.encode())
+        conn.close()
