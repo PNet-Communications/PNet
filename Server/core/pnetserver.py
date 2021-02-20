@@ -23,7 +23,6 @@ if pwd.is_file():
         print('Got Connection from', addr)
         message = "Successfully connected to " + hostip
         conn.send(message.encode())
-        conn.close()
             
 else:
     password_provided = getpass("Enter a secure password: ")
@@ -47,4 +46,3 @@ else:
         print('Got Connection from', addr)
         message = "Successfully connected to " + hostip
         conn.send(message.encode())
-        conn.close()
